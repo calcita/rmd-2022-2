@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>R + Markdown: automatización desde   un mail a una tesis         </title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Richard Detomasi y Gabriela Mathieu " />
+    <script src="index_files/header-attrs-2.13/header-attrs.js"></script>
+    <link href="index_files/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="index_files/remark-css-0.0.1/default-fonts.css" rel="stylesheet" />
+    <link href="index_files/remark-css-0.0.1/rladies-fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="custom.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# R + Markdown: automatización desde <br> un mail a una tesis<br><br>
+<img src="img_md/Rlogo.png" style="width:8.0%" />   <img
+src="img_md/RStudio-Logo-Flat.png" style="width:18.0%" />   <img
+src="img_md/rmarkdown.png" style="width:6.0%" />
+### Richard Detomasi y Gabriela Mathieu<br>
+### <span>&lt;style=‘font-size: 80%;’&gt; FCS - Educación Permanente
+<br> Taller intro: Markdown<br><br>
+</style>
+</span> <img src="img_md/cc-by-sa.png" />
+
+---
+
+
+
+
+
+
+# Objetivos del taller
+
+- Comprender qué es R+Markdown
+&lt;br&gt;&lt;br&gt;
+--
+
+- Comprender los principales componentes de un documento Rmd
+&lt;br&gt;&lt;br&gt;
+--
+
+- Ventajas de combinar código y texto
+&lt;br&gt;&lt;br&gt;
+--
+
+- Explorar los diferentes productos que se pueden realizar (informes, webs, libros, etc.)
+&lt;br&gt;&lt;br&gt;
+--
+
+- Realizar un primer documento básico e ir agregando elementos
+
+---
+# Recursos recomendados
+
+[Tutorial de RMarkdown](https://rmarkdown.rstudio.com/lesson-1.html)
+
+[RMarkdown la guía definitiva](https://bookdown.org/yihui/rmarkdown/)
+
+[RMarkdown cookbook](https://bookdown.org/yihui/rmarkdown-cookbook/)
+
+[knitr: Elegant, flexible, and fast dynamic report generation with R](https://yihui.org/knitr/)
+
+[RMarkdwon cheatsheet](https://github.com/rstudio/cheatsheets/raw/main/rmarkdown-2.0.pdf)
+
+[RStudio Visual mode](https://www.rstudio.com/blog/exploring-rstudio-visual-markdown-editor/)
+
+[Un flujo de trabajo reproducible](https://www.youtube.com/watch?v=s3JldKoA0zw)
+
+---
+# Qué es R+Markdown?
+
+- R es un &lt;span style=" font-weight: bold;    border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: #b3e2cd !important;" &gt;lenguaje de programación&lt;/span&gt;.
+&lt;br&gt;&lt;br&gt;
+--
+
+- Markdown es un &lt;span style=" font-weight: bold;    border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: #b3e2cd !important;" &gt;lenguaje de marcado&lt;/span&gt; (Markup Language), es decir, es una manera de codificar un documento.
+&lt;br&gt;&lt;br&gt;
+--
+
+- Al texto se le añaden etiquetas (marcas) que modifican la presentación. El doble asterisco ** será la marca para poner negritas en un texto.
+&lt;br&gt;&lt;br&gt;
+--
+
+- El paquete rmarkdown combina R + Markdown y así permite escribir un documento que &lt;span style=" font-weight: bold;    border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: #b3e2cd !important;" &gt;combina texto con código&lt;/span&gt;.
+&lt;br&gt;&lt;br&gt;
+--
+
+- El documento se escribe en un archivo de &lt;span style=" font-weight: bold;    border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: #b3e2cd !important;" &gt;extensión Rmd&lt;/span&gt; y es necesario compilar para obtener un archivo de &lt;span style=" font-weight: bold;    border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: #b3e2cd !important;" &gt;salida en formato PDF, DOC, HTML,&lt;/span&gt; etc.
+&lt;br&gt;&lt;br&gt;
+--
+
+- "_Los documentos de **R Markdown** son totalmente reproducibles. Utilizando una interfaz como RStudio para unir el texto narrativo y el código para producir resultados elegantemente formateados. Permitiendo compaginar varios lenguajes, incluidos LaTeX, R, Python y SQL._" (&lt;https://rmarkdown.rstudio.com/&gt;)
+     
+
+---
+# ¿Por qué es importante?
+
+- &lt;span style=" font-weight: bold;    border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: #b3e2cd !important;" &gt;Reproducibilidad&lt;/span&gt;: Permite reproducir un informe de forma sencilla y ágil, tanto por quien lo crea como por cualquier otra persona.
+&lt;br&gt;&lt;br&gt;
+--
+
+- &lt;span style=" font-weight: bold;    border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: #b3e2cd !important;" &gt;Evita el 'copy-paste'&lt;/span&gt;, minimizando errores y maximizando el uso del tiempo. Al combinar  texto y código evita escribir y correr la sintaxis por un lado y el documento por otro.  
+&lt;br&gt;&lt;br&gt;
+--
+
+- &lt;span style=" font-weight: bold;    border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: #b3e2cd !important;" &gt;Los gráficos y tablas no son imágenes incrustadas!!!&lt;/span&gt; Se producen en el mismo documento a partir de código R.
+&lt;br&gt;&lt;br&gt;
+--
+  
+- &lt;span style=" font-weight: bold;    border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: #b3e2cd !important;" &gt;Permite escribir párrafos funcionales&lt;/span&gt;: parte del contenido es código R (se muestra el resultado).
+&lt;br&gt;&lt;br&gt;
+--
+
+- &lt;span style=" font-weight: bold;    border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: #b3e2cd !important;" &gt;Flexbilidad&lt;/span&gt;: Este tipo de informes resulta muy flexible ante un cambio en la programación o en los datos, sin tener que rehacer todo desde cero.
+
+
+---
+# Ejemplos de documentos
+
+- [Artículos](https://github.com/rstudio/rticles)
+&lt;br&gt;&lt;br&gt;
+--
+
+- [PDF](https://bookdown.org/yihui/rmarkdown/pdf-document.html)
+&lt;br&gt;&lt;br&gt;
+--
+
+- [Documentos WORD](https://bookdown.org/yihui/rmarkdown/word-document.html)
+&lt;br&gt;&lt;br&gt;
+--
+
+- [Presentaciones Beamer](https://bookdown.org/yihui/rmarkdown/beamer-presentation.html)
+&lt;br&gt;&lt;br&gt;
+--
+
+- [Libros](https://bookdown.org/)
+&lt;br&gt;&lt;br&gt;
+--
+
+- [Tesis](https://github.com/ismayc/thesisdown)
+&lt;br&gt;&lt;br&gt;
+--
+
+- [y varios más](https://www.overleaf.com/latex/templates/)
+
+
+---
+# Qué se necesita para usar R Markdown
+
+- Tener instalados R y RStudio. Preferentemente versiones actuales.
+&lt;br&gt;&lt;br&gt;
+--
+
+- Instalar los paquetes &lt;span style=" font-weight: bold;    border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: #b3e2cd !important;" &gt;rmarkdown&lt;/span&gt; y &lt;span style=" font-weight: bold;    border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: #b3e2cd !important;" &gt;knitr&lt;/span&gt;.
+&lt;br&gt;&lt;br&gt;
+--
+
+- El paquete &lt;span style=" font-weight: bold;    border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: #b3e2cd !important;" &gt;knitr&lt;/span&gt; es el que el vincula a R con Markdown (entre otros). En inglés Knit significa **tejer**. Lo que hace este paquete es realizar un tejido entre R y Markdown.
+&lt;br&gt;&lt;br&gt;
+--
+
+- Adicionalmente, para este curso utilizaremos los paquetes &lt;span style=" font-weight: bold;    border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: #b3e2cd !important;" &gt;tinytex&lt;/span&gt; y &lt;span style=" font-weight: bold;    border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: #b3e2cd !important;" &gt;kableExtra&lt;/span&gt;. 
+
+
+```r
+# Instala paquetes (por única vez)
+*install.packages("rmarkdown")
+*install.packages("knitr")
+*install.packages("kableExtra")
+
+# tinytex se instala en 2 pasos
+*install.packages("tinytex")
+*tinytex::install_tinytex()
+```
+
+---
+class: inverse, center, middle
+# .Rmd
+
+
+---
+# Crear documento
+
+- Vamos a **File --&gt; New File --&gt; R Markdown..**
+
+.center.w-50[
+![](img_md/creatermd.gif)&lt;!-- --&gt;
+]
+
+---
+# Nuevo documento
+
+- La extensión es &lt;span style=" font-weight: bold;    border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: #b3e2cd !important;" &gt;.Rmd&lt;/span&gt; porque permite combinar código **R** con **M**ark**d**own.
+&lt;br&gt;&lt;br&gt;
+--
+
+- Por defecto, cuando generamos un nuevo documento .Rmd se abre una ventana que nos permite elegir el formato de salida, autor/a/e y título. 
+&lt;br&gt;&lt;br&gt;
+--
+
+- Una vez elegimos el output, damos ok y nos abre el archivo .Rmd
+&lt;br&gt;&lt;br&gt;
+--
+
+- Este archivo .Rmd no viene vacío, sino que &lt;span style=" font-weight: bold;    border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: #b3e2cd !important;" &gt;trae un código de ejemplo&lt;/span&gt;. 
+&lt;br&gt;&lt;br&gt;
+--
+
+- Este código (R+Markdown) lo podemos &lt;span style=" font-weight: bold;    border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: #b3e2cd !important;" &gt;reutilizar&lt;/span&gt; (sobre todo el preámbulo) para generar nuestro propio documento.
+&lt;br&gt;&lt;br&gt;
+--
+
+- Antes de comenzar a editarlo vamos a &lt;span style=" font-weight: bold;    border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: #b3e2cd !important;" &gt;guardar el archivo&lt;/span&gt;, para lo que será necesario definirle un nombre (por defecto, aparece Untitled.Rmd*).
+
+---
+# Source mode vs Visual mode
+
+- Por defecto, el &lt;span style=" font-weight: bold;    border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: #b3e2cd !important;" &gt;código&lt;/span&gt; de un archivo .Rmd lo vemos en la &lt;span style=" font-weight: bold;    border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: #b3e2cd !important;" &gt;pestaña 'Source'&lt;/span&gt; de RStudio.
+&lt;br&gt;&lt;br&gt;
+--
+
+- A partir de las versiones de RStudio 1.4.* se incorporó una &lt;span style=" font-weight: bold;    border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: #b3e2cd !important;" &gt;pestaña 'Visual'&lt;/span&gt; que permite ver el &lt;span style=" font-weight: bold;    border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: #b3e2cd !important;" &gt;código&lt;/span&gt; y el &lt;span style=" font-weight: bold;    border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: #b3e2cd !important;" &gt;output&lt;/span&gt; que ese código genera.
+&lt;br&gt;&lt;br&gt;
+--
+
+- También podemos editar el código desde "Visual" y existen algunos "atajos" para generar el marcado del texto.
+&lt;br&gt;&lt;br&gt;
+--
+
+- Al cambiar a Visual, la primera vez sale el siguiente mensaje que debemos aceptar:
+
+.center.w-80[
+&lt;img src="img_md/switch_visual.png" width="273" /&gt;
+]
+
+---
+# Source mode vs Visual mode
+
+.pull-left[
+**SOURCE**
+.center.w-60[
+&lt;img src="img_md/example_source.png" width="364" /&gt;
+]
+]
+
+.pull-right[
+**VISUAL**
+.center.w-60[
+&lt;img src="img_md/example_visual.png" width="364" /&gt;
+]
+]
+
+---
+# Cómo obtenemos el documento final
+
+- Antes de profundizar en el contenido del .Rmd, veamos como obtener el documento final.
+&lt;br&gt;&lt;br&gt;
+--
+
+- El ícono &lt;span style=" font-weight: bold;    border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: #b3e2cd !important;" &gt;Knit&lt;/span&gt; nos permite obtener el archivo de salida. El símbolo es un ovillo de lana y la aguja. *knit* significa tejer.
+
+&lt;img src="./img_md/icono_knit.png" width="20%" style="display: block; margin: auto;" /&gt;
+--
+
+- La flecha a la derecha del ícono nos despliega una lista con las opciones configuradas para "exportar" el documento. Esta acción habitualmente se denomina &lt;span style=" font-weight: bold;    border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: #b3e2cd !important;" &gt;compilar o renderizar&lt;/span&gt;.
+&lt;br&gt;&lt;br&gt;
+--
+
+- Si lo que estamos produciendo es un documento tipo informe, usualmente se desplegarán las opciones &lt;span style=" font-weight: bold;    border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: #b3e2cd !important;" &gt;knit to HTML&lt;/span&gt;, &lt;span style=" font-weight: bold;    border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: #b3e2cd !important;" &gt;knit to PDF&lt;/span&gt; y &lt;span style=" font-weight: bold;    border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: #b3e2cd !important;" &gt;knit to Word&lt;/span&gt;.
+&lt;br&gt;&lt;br&gt;
+--
+
+- Haciendo click en una de estas opciones, el encabezado YAML se actualizará automáticamente. Es posible compilar en simultáneo a múltiples formatos un mismo documento.
+&lt;br&gt;&lt;br&gt;
+--
+
+- El archivo compilado en el formato elegido se guardará en el mismo directorio que el Rmd.
+
+---
+# Compilar el ejemplo a PDF
+![](img_md/compile.gif)
+---
+# Flujo RMarkdown
+
+En el proceso de compilación suceden por detrás varias cosas hasta llegar a generarse el archivo de salida. 
+
+.center.w-80[
+&lt;img src="img_md/rmarkdown_workflow.png" width="691" /&gt;
+]
+
+Al hacer knit está corriendo por detrás la función `rmarkdown::render()`
+
+---
+# Flujo RMarkdown
+
+- Al compilar el archivo &lt;span style=" font-weight: bold;    border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: #b3e2cd !important;" &gt;.Rmd&lt;/span&gt; se genera un archivo temporal &lt;span style=" font-weight: bold;    border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: #b3e2cd !important;" &gt;.md&lt;/span&gt; 
+&lt;br&gt;&lt;br&gt;
+
+
+- Luego el archivo &lt;span style=" font-weight: bold;    border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: #b3e2cd !important;" &gt;.md&lt;/span&gt; es procesado por *Pandoc*, un herramienta multipropósito diseñada para convertir archivos de un lenguaje de marcado a otro. Toma cada parámetro especificado en el YAML y lo convierte al formato especificado del documento de salida por ejemplo &lt;span style=" font-weight: bold;    border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: #b3e2cd !important;" &gt;.HTML&lt;/span&gt;.
+&lt;br&gt;&lt;br&gt;
+
+
+- Si el documento de salida es PDF, hay un proceso adicional donde Pandoc convierte el archivo &lt;span style=" font-weight: bold;    border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: #b3e2cd !important;" &gt;.md&lt;/span&gt; a un archivo &lt;span style=" font-weight: bold;    border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: #b3e2cd !important;" &gt;.tex&lt;/span&gt;. Este archivo es procesado por LaTeX para convertirlo en el formato final &lt;span style=" font-weight: bold;    border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: #b3e2cd !important;" &gt;.PDF&lt;/span&gt;.
+
+---
+# Estructura de un archivo Rmd 
+
+1)  &lt;span style=" font-weight: bold;    border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: #b3e2cd !important;" &gt;Encabezado YAML&lt;/span&gt;: al principio del documento se completan parámetros generales entre `---`. Es la metadata del documento.
+
+
+2) &lt;span style=" font-weight: bold;    border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: #b3e2cd !important;" &gt;Texto&lt;/span&gt;: cotiene código markdown para darle formato
+
+3) &lt;span style=" font-weight: bold;    border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: #b3e2cd !important;" &gt;Código&lt;/span&gt;: contiene código R. El entorno para escribir código R se denomina `chunk` .
+
+.center.w-100[
+&lt;img src="img_md/encabezado_rmd_partes.png" width="406" /&gt;
+]
+
+---
+class: inverse, center, middle
+# YAML
+
+---
+# Encabezado YAML
+
+- YAML significa YAML Ain’t Markup Language.
+&lt;br&gt;&lt;br&gt;
+--
+
+- El YAML comienza y termina con 3 guiones y se define la metadata del documento. Los nombres de los argumentos se escriben en inglés y van seguidos de `:`
+
+.center.w-100[
+&lt;img src="img_md/yaml_argumentos.png" width="353" /&gt;
+]
+
+- Un encabezado básico de un documento .Rmd genera un documento de salida con título, nombre de autor/a/e y fecha.
+&lt;br&gt;&lt;br&gt;
+--
+
+.pull-left[
+**Rmd**
+
+&lt;img src="img_md/encabezado_source.png" width="400px" style="display: block; margin: auto;" /&gt;
+
+]
+.pull-right[
+**PDF**
+
+&lt;img src="img_md/encabezado_output.png" width="250px" style="display: block; margin: auto;" /&gt;
+]
+
+---
+class: inverse, center, middle
+# Formatos de salida
+
+---
+# HTML
+
+- Compilar a formato Hyper Text Markup Language (HTML) es el valor por defecto.
+&lt;br&gt;&lt;br&gt;
+--
+
+- La ventaja de HTML sobre otros formatos es que permite  &lt;span style=" font-weight: bold;    border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: #b3e2cd !important;" &gt;agregar elementos interactivos&lt;/span&gt; al documento, por ejemplo, gifs y videos. 
+&lt;br&gt;&lt;br&gt;
+--
+
+- Esta presentación esta hecha en Rmd y compilada a HTML ya que contiene elementos interactivos que no se verían en PDF.
+&lt;br&gt;&lt;br&gt;
+--
+
+- Para ver un documento HTML, es necesario abrirlo en un navegador de internet.
+
+---
+# PDF
+
+- Otra opción es compilar a Portable Document Format (PDF)
+&lt;br&gt;&lt;br&gt;
+--
+
+- Para exportar a PDF es necesario tener el programa &lt;span style=" font-weight: bold;    border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: #b3e2cd !important;" &gt;LaTeX instalado&lt;/span&gt;.
+&lt;br&gt;&lt;br&gt;
+--
+
+- De lo contrario saldrá un mensaje de error indicando que LaTeX no está instalado y es necesario para generar el output en PDF.
+&lt;br&gt;&lt;br&gt;
+--
+
+- LaTeX es un sistema de composición de textos que tiene su propio lenguaje (comandos y paquetes). 
+&lt;br&gt;&lt;br&gt;
+--
+
+- Gracias al paquete &lt;span style=" font-weight: bold;    border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: #b3e2cd !important;" &gt;tinytex&lt;/span&gt; se puede instalar desde R. Se instala como vimos unas diapos antes:
+
+
+```r
+# tinytex se instala en 2 pasos
+*install.packages("tinytex")
+*tinytex::install_tinytex()
+```
+
+---
+# Word
+
+- Otro formato de salida posible es Microsoft Word.
+&lt;br&gt;&lt;br&gt;
+--
+
+- No es necesario tener instalado Word en la computadora
+&lt;br&gt;&lt;br&gt;
+--
+
+- Al igual que el formato PDF, no permite elementos interactivos.
+&lt;br&gt;&lt;br&gt;
+--
+
+- Para darle formato es necesario usar un template hecho en Word.
+
+---
+class: inverse, center, middle
+# Markdown
+
+
+---
+# Sintaxis básica Markdown
+
+- Markdown es un lenguaje de marcado, por ejemplo, para escribir un texto en negrita es necesario escribir dos asteriscos antes y despúes.
+
+&lt;img src="img_md/texto.png" width="650px" style="display: block; margin: auto auto auto 0;" /&gt;
+
+[RMarkdown guía](https://rmarkdown.rstudio.com/docs/)
+
+---
+# Títulos, súbtitulos, etc.
+
+- El tamaño de los títulos se define agregando un  &lt;span style=" font-weight: bold;    border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: #b3e2cd !important;" &gt;símbolo de numeral&lt;/span&gt; (hashtag).
+&lt;br&gt;&lt;br&gt;
+--
+
+- La  &lt;span style=" font-weight: bold;    border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: #b3e2cd !important;" &gt;jerarquía&lt;/span&gt; del título está determinada por la  &lt;span style=" font-weight: bold;    border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: #b3e2cd !important;" &gt;cantidad&lt;/span&gt; de `#`
+&lt;br&gt;&lt;br&gt;
+--
+
+- El título más grande va precedido de un numeral.
+&lt;br&gt;&lt;br&gt;
+--
+
+- Cuanto más numerales, más se achica el título.
+&lt;br&gt;&lt;br&gt;
+--
+
+- Los títulos por defecto se ven en negrita.
+&lt;br&gt;&lt;br&gt;
+--
+
+- Si definimos que los títulos estén numerados pero uno en particular preferimos que no (por ej. prefacio), agregamos `{-}` o `{.unnumbered}` después del título.
+
+
+---
+# Lista sin orden
+
+&lt;img src="img_md/lista_desordenada.png" width="650px" style="display: block; margin: auto auto auto 0;" /&gt;
+
+---
+# Lista ordenada
+
+&lt;img src="img_md/lista_ordenada.png" width="650px" style="display: block; margin: auto auto auto 0;" /&gt;
+
+---
+# Listas anidadas 
+
+&lt;img src="img_md/listas_anidadas.png" width="650px" style="display: block; margin: auto auto auto 0;" /&gt;
+
+
+---
+# Caracteres especiales
+
+&lt;!-- Para que se impriman caracteres especiales se debe utilizar una \\ antes del símbolo   --&gt;
+
+&lt;img src="img_md/especiales.png" width="650px" style="display: block; margin: auto auto auto 0;" /&gt;
+
+---
+# Nota al pie
+
+- Para poner una nota al pie debo escribir &lt;span style=" font-weight: bold;    border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: #b3e2cd !important;" &gt;^[]&lt;/span&gt; y dentro de los paréntesis rectos escribir el contenido de la nota al pie.
+&lt;br&gt;&lt;br&gt;
+--
+
+- Al compilarse el documento estas notas al pie se numerarán automáticamente según el orden en que se ubiquen en el documento.
+&lt;br&gt;&lt;br&gt;
+--
+
+- El texto de la nota al pie irá al final de la hoja debajo de una línea y en un tamaño de letra más chico que el del documento.
+&lt;br&gt;&lt;br&gt;
+--
+
+.pull-left[
+**Rmd**
+
+&lt;img src="img_md/nota_alpie_source.png" width="260" style="display: block; margin: auto auto auto 0;" /&gt;
+]
+
+.pull-left[
+**PDF**
+
+&lt;img src="img_md/nota_alpie_output1.png" width="253" style="display: block; margin: auto auto auto 0;" /&gt;
+
+&lt;img src="img_md/nota_alpie_output2.png" width="308" style="display: block; margin: auto auto auto 0;" /&gt;
+
+]
+
+---
+# Incluir imágenes
+
+.pull-left[
+**Rmd**
+
+```r
+![](img_md/Rlogo.png)
+```
+
+]
+
+.pull-left[
+**PDF**
+&lt;img src="img_md/Rlogo.png" width="322" /&gt;
+
+]
+
+Luego veremos otra forma de incluir imágenes
+
+Es posible modificar la apariencia/ubicación de la imagen  incluyendo código HTML, esto funciona cuando compilamos a HTML.
+
+---
+# Incluir imágenes
+
+.pull-left[
+**Rmd**
+
+```r
+![Logo oficial de R](img_md/Rlogo.png)
+```
+
+]
+
+.pull-left[
+**PDF**
+&lt;div class="figure"&gt;
+&lt;img src="img_md/Rlogo.png" alt="Logo oficial de R" width="322" /&gt;
+&lt;p class="caption"&gt;Logo oficial de R&lt;/p&gt;
+&lt;/div&gt;
+
+]
+
+---
+# Hipervínculos 
+
+Se puede hipervincular un texto indicando la url entre paréntesis y el texto entre rectos.
+
+En el documento de salida, hacer click sobre el texto hipervinculado lleva a la página web indicada.
+
+.pull-left[
+**Rmd**
+
+&lt;img src="img_md/hipervinculo_source.png" width="650px" style="display: block; margin: auto auto auto 0;" /&gt;
+¨
+]
+
+.pull-right[
+**PDF**
+&lt;br&gt;&lt;br&gt;
+
+&lt;img src="img_md/hipervinculo_output.png" width="650px" style="display: block; margin: auto auto auto 0;" /&gt;
+]
+
+
+---
+class: inverse, center, middle
+# Configurar el YAML
+
+---
+# Secciones numeradas
+
+- Para indicar que queremos que las secciones (títulos, subtítulos, etc.) aparezcan numeradas debemos agregar la opción `number_sections` con el valor `true` en el YAML del documento
+&lt;br&gt;&lt;br&gt;
+--
+
+- Esta opción es parte del output y el formato de salida `pdf_document` elegido.
+&lt;br&gt;&lt;br&gt;
+--
+
+- Se debe escribir en "cascada" para que surta efecto, la opción `pdf_document` debe ir ahora en la línea de abajo de output y es necesario agregar : ya que vendrá una siguiente opción. En este caso agregamos en la siguiente línea la opción `number_sections: true`.
+
+.center.w-80[
+&lt;img src="img_md/yaml_sections.png" width="233" /&gt;
+]
+&lt;br&gt;&lt;br&gt;
+--
+
+- Es necesario que diga `true` todo en minúscula, de lo contrario no funcionará.
+
+
+---
+# Tabla de contenidos
+
+- Para ver el índice del documento, se debe agregar en el YAML el argumento `toc` con valor `true`. TOC significa Table of Contents.
+&lt;br&gt;&lt;br&gt;
+--
+
+- Para que aparezcan en el índice solo los títulos de primer nivel, debemos agregar la opción `toc_depth` con el valor `1`.
+
+   
+.pull-left[
+**Rmd**
+
+&lt;img src="img_md/toc_source.png" width="200px" style="display: block; margin: auto auto auto 0;" /&gt;
+
+
+&lt;img src="img_md/toc_titulos.png" width="600px" style="display: block; margin: auto auto auto 0;" /&gt;
+
+]
+
+.pull-right[
+**PDF**
+&lt;br&gt;&lt;br&gt;
+
+&lt;img src="img_md/toc_output.png" width="650px" style="display: block; margin: auto auto auto 0;" /&gt;
+]
+
+
+
+
+
+---
+# Opciones de figuras
+
+- Hay una serie de opciones que afectan a la salida de las figuras de los documentos PDF:
+&lt;br&gt;&lt;br&gt;
+--
+
+- `fig_width` y `fig_height` pueden usarse para controlar el ancho y la altura de la figura por defecto (6x4.5 es usado por defecto).
+&lt;br&gt;&lt;br&gt;
+--
+
+- `fig_crop` controla si la utilidad pdfcrop, si está disponible en su sistema, se aplica automáticamente a las figuras PDF (esto es cierto por defecto).
+&lt;br&gt;&lt;br&gt;
+--
+
+- `fig_caption` controla si las figuras se muestran con subtítulos (esto es falso por defecto).
+&lt;br&gt;&lt;br&gt;
+--
+
+- Luego veremos otra forma de controlar las opciones de las figuras.
+
+---
+# Ejemplo 
+
+
+
+```r
+---
+title: "Titulo"   
+author: "Nombre"  
+output:
+  pdf_document:
+    fig_width: 7
+    fig_height: 6
+    fig_caption: true
+---
+```
+
+---
+# Opciones de LaTeX
+
+También se puede definir en el YAML el tamaño de hoja, la fuente, el tamaño de fuente, los márgenes, etc.
+
+
+| __Variable__	| __Descripción__ |
+|:-----------|:-------------------------------------------|
+|`lang` |	Idioma del documento |
+|`fontsize` |	Tamaño de la fuente (i.e. 10pt, 11pt, 12pt) |
+|`documentclass` |	Clase de documento (i.e. `article`) |
+|`classoption` |	Opciones de la `documentclass` (i.e. `oneside` o `a4paper`) |
+|`geometry` |	Tamaño de los márgenes (i.e. `margin=1in`) |
+|`mainfont`, `sansfont`, `monofont`, `mathfont`	| Tipos de fuentes (funciona solo con xelatex o lualatex)|
+|`linkcolor`, `urlcolor`, `citecolor`	| Color de los vínculos internos, externos, y de citas|
+
+
+---
+# Ejemplo
+
+Y nuestro encabezado se podría ver así...
+
+
+
+```r
+---
+title: "Titulo"   
+author: "Nombre"  
+output:
+  pdf_document    
+lang: "es-UY"
+classoption: a4paper     
+fontsize: 12pt    
+geometry: margin = 1.2in     
+linkcolor: black    
+urlcolor: blue
+---
+```
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

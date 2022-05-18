@@ -1,0 +1,774 @@
+---
+title: "R + Markdown: automatización desde <br> un mail a una tesis<br><br> ![](img_intro/Rlogo.png){ width=8% } &nbsp; ![](img_intro/RStudio-Logo-Flat.png){ width=18% } &nbsp; ![](img_intro/rmarkdown.png){ width=6% }"
+author: "Richard Detomasi y Gabriela Mathieu<br>"
+date: "<span><style='font-size: 80%;'> FCS - Educación Permanente <br> Taller intro: Markdown<br><br></style></span> ![](img_intro/cc-by-sa.png)"
+output: 
+  xaringan::moon_reader:
+    css: [default, default-fonts, rladies-fonts, custom.css]
+    nature:
+      highlightStyle: github
+      highlightLines: true
+---
+```{r, include = F}
+knitr::opts_chunk$set(fig.width = 6, message = FALSE, warning = FALSE, comment = "", cache = FALSE, fig.retina = 3)
+library(flipbookr)
+library(dplyr)
+library(flair)
+library(knitr)
+library(kableExtra)
+library(fontawesome)
+library(janitor)
+```
+```{r xaringan-themer, include=FALSE, warning=FALSE}
+library(xaringanthemer)
+style_xaringan(header_color = "#980043", code_inline_font_size = "2em", header_background_color =  "#980043")
+style_duo_accent(
+  #base_color = "#43a2ca",
+  header_font_google = google_font("Mukta"),#Ubuntu Condensed
+  text_font_google   = google_font("Montserrat", "300", "300i"),
+  code_font_google   = google_font("Fira Mono"),
+  primary_color      = "#980043", # pantone classic blue #0F4C81
+  secondary_color    = "#1c9099", # pantone baby blue #b3e2cd
+  text_font_size     = "25px"
+)
+```
+
+```{r, include=FALSE}
+text_spec2 <- function(x = "x"){
+  kableExtra::text_spec(x, background = "#b3e2cd", bold = T)
+}
+
+text_spec3 <- function(x = "x"){
+  kableExtra::text_spec(x, color = "deeppink", bold = T)
+}
+text_spec4 <- function(x = "x"){
+  kableExtra::text_spec(x, color = "#fd8d3c", bold = T)
+}
+text_spec5 <- function(x = "x"){
+  kableExtra::text_spec(x, color = "#08519c", bold = T)
+}
+```
+
+# Objetivos del taller
+
+- Comprender qué es R+Markdown
+<br><br>
+--
+
+- Comprender los principales componentes de un documento Rmd
+<br><br>
+--
+
+- Ventajas de combinar código y texto
+<br><br>
+--
+
+- Explorar los diferentes productos que se pueden realizar (informes, webs, libros, etc.)
+<br><br>
+--
+
+- Realizar un primer documento básico e ir agregando elementos
+
+---
+# Recursos recomendados
+
+[Tutorial de RMarkdown](https://rmarkdown.rstudio.com/lesson-1.html)
+
+[RMarkdown la guía definitiva](https://bookdown.org/yihui/rmarkdown/)
+
+[RMarkdown cookbook](https://bookdown.org/yihui/rmarkdown-cookbook/)
+
+[knitr: Elegant, flexible, and fast dynamic report generation with R](https://yihui.org/knitr/)
+
+[RMarkdwon cheatsheet](https://github.com/rstudio/cheatsheets/raw/main/rmarkdown-2.0.pdf)
+
+[RStudio Visual mode](https://www.rstudio.com/blog/exploring-rstudio-visual-markdown-editor/)
+
+[Un flujo de trabajo reproducible](https://www.youtube.com/watch?v=s3JldKoA0zw)
+
+---
+# Qué es R+Markdown?
+
+- R es un `r text_spec2("lenguaje de programación")`.
+<br><br>
+--
+
+- Markdown es un `r text_spec2("lenguaje de marcado")` (Markup Language), es decir, es una manera de codificar un documento.
+<br><br>
+--
+
+- Al texto se le añaden etiquetas (marcas) que modifican la presentación. El doble asterisco ** será la marca para poner negritas en un texto.
+<br><br>
+--
+
+- El paquete rmarkdown combina R + Markdown y así permite escribir un documento que `r text_spec2("combina texto con código")`.
+<br><br>
+--
+
+- El documento se escribe en un archivo de `r text_spec2("extensión Rmd")` y es necesario compilar para obtener un archivo de `r text_spec2("salida en formato PDF, DOC, HTML,")` etc.
+<br><br>
+--
+
+- "_Los documentos de **R Markdown** son totalmente reproducibles. Utilizando una interfaz como RStudio para unir el texto narrativo y el código para producir resultados elegantemente formateados. Permitiendo compaginar varios lenguajes, incluidos LaTeX, R, Python y SQL._" (<https://rmarkdown.rstudio.com/>)
+     
+
+---
+# ¿Por qué es importante?
+
+- `r text_spec2("Reproducibilidad")`: Permite reproducir un informe de forma sencilla y ágil, tanto por quien lo crea como por cualquier otra persona.
+<br><br>
+--
+
+- `r text_spec2("Evita el 'copy-paste'")`, minimizando errores y maximizando el uso del tiempo. Al combinar  texto y código evita escribir y correr la sintaxis por un lado y el documento por otro.  
+<br><br>
+--
+
+- `r text_spec2("Los gráficos y tablas no son imágenes incrustadas!!!")` Se producen en el mismo documento a partir de código R.
+<br><br>
+--
+  
+- `r text_spec2("Permite escribir párrafos funcionales")`: parte del contenido es código R (se muestra el resultado).
+<br><br>
+--
+
+- `r text_spec2("Flexbilidad")`: Este tipo de informes resulta muy flexible ante un cambio en la programación o en los datos, sin tener que rehacer todo desde cero.
+
+
+---
+# Ejemplos de documentos
+
+- [Artículos](https://github.com/rstudio/rticles)
+<br><br>
+--
+
+- [PDF](https://bookdown.org/yihui/rmarkdown/pdf-document.html)
+<br><br>
+--
+
+- [Documentos WORD](https://bookdown.org/yihui/rmarkdown/word-document.html)
+<br><br>
+--
+
+- [Presentaciones Beamer](https://bookdown.org/yihui/rmarkdown/beamer-presentation.html)
+<br><br>
+--
+
+- [Libros](https://bookdown.org/)
+<br><br>
+--
+
+- [Tesis](https://github.com/ismayc/thesisdown)
+<br><br>
+--
+
+- [y varios más](https://www.overleaf.com/latex/templates/)
+
+
+---
+# Qué se necesita para usar R Markdown
+
+- Tener instalados R y RStudio. Preferentemente versiones actuales.
+<br><br>
+--
+
+- Instalar los paquetes `r text_spec2("rmarkdown")` y `r text_spec2("knitr")`.
+<br><br>
+--
+
+- El paquete `r text_spec2("knitr")` es el que el vincula a R con Markdown (entre otros). En inglés Knit significa **tejer**. Lo que hace este paquete es realizar un tejido entre R y Markdown.
+<br><br>
+--
+
+- Adicionalmente, para este curso utilizaremos los paquetes `r text_spec2("tinytex")` y `r text_spec2("kableExtra")`. 
+
+```{r eval = FALSE}
+# Instala paquetes (por única vez)
+install.packages("rmarkdown") #<<
+install.packages("knitr") #<<
+install.packages("kableExtra") #<<
+
+# tinytex se instala en 2 pasos
+install.packages("tinytex") #<<
+tinytex::install_tinytex() #<<
+```
+
+---
+class: inverse, center, middle
+# .Rmd
+
+
+---
+# Crear documento
+
+- Vamos a **File --> New File --> R Markdown..**
+
+.center.w-50[
+```{r echo = FALSE}
+knitr::include_graphics("img_md/creatermd.gif")
+```
+]
+
+---
+# Nuevo documento
+
+- La extensión es `r text_spec2(".Rmd")` porque permite combinar código **R** con **M**ark**d**own.
+<br><br>
+--
+
+- Por defecto, cuando generamos un nuevo documento .Rmd se abre una ventana que nos permite elegir el formato de salida, autor/a/e y título. 
+<br><br>
+--
+
+- Una vez elegimos el output, damos ok y nos abre el archivo .Rmd
+<br><br>
+--
+
+- Este archivo .Rmd no viene vacío, sino que `r text_spec2("trae un código de ejemplo")`. 
+<br><br>
+--
+
+- Este código (R+Markdown) lo podemos `r text_spec2("reutilizar")` (sobre todo el preámbulo) para generar nuestro propio documento.
+<br><br>
+--
+
+- Antes de comenzar a editarlo vamos a `r text_spec2("guardar el archivo")`, para lo que será necesario definirle un nombre (por defecto, aparece Untitled.Rmd*).
+
+---
+# Source mode vs Visual mode
+
+- Por defecto, el `r text_spec2("código")` de un archivo .Rmd lo vemos en la `r text_spec2("pestaña 'Source'")` de RStudio.
+<br><br>
+--
+
+- A partir de las versiones de RStudio 1.4.* se incorporó una `r text_spec2("pestaña 'Visual'")` que permite ver el `r text_spec2("código")` y el `r text_spec2("output")` que ese código genera.
+<br><br>
+--
+
+- También podemos editar el código desde "Visual" y existen algunos "atajos" para generar el marcado del texto.
+<br><br>
+--
+
+- Al cambiar a Visual, la primera vez sale el siguiente mensaje que debemos aceptar:
+
+.center.w-80[
+```{r echo = FALSE}
+knitr::include_graphics("img_md/switch_visual.png")
+```
+]
+
+---
+# Source mode vs Visual mode
+
+.pull-left[
+**SOURCE**
+.center.w-60[
+```{r echo = FALSE}
+knitr::include_graphics("img_md/example_source.png")
+```
+]
+]
+
+.pull-right[
+**VISUAL**
+.center.w-60[
+```{r echo = FALSE}
+knitr::include_graphics("img_md/example_visual.png")
+```
+]
+]
+
+---
+# Cómo obtenemos el documento final
+
+- Antes de profundizar en el contenido del .Rmd, veamos como obtener el documento final.
+<br><br>
+--
+
+- El ícono `r text_spec2("Knit")` nos permite obtener el archivo de salida. El símbolo es un ovillo de lana y la aguja. *knit* significa tejer.
+
+```{r , echo=FALSE, warning=FALSE,out.width = '20%', fig.align="center"}
+knitr::include_graphics("./img_md/icono_knit.png")
+```
+--
+
+- La flecha a la derecha del ícono nos despliega una lista con las opciones configuradas para "exportar" el documento. Esta acción habitualmente se denomina `r text_spec2("compilar o renderizar")`.
+<br><br>
+--
+
+- Si lo que estamos produciendo es un documento tipo informe, usualmente se desplegarán las opciones `r text_spec2("knit to HTML")`, `r text_spec2("knit to PDF")` y `r text_spec2("knit to Word")`.
+<br><br>
+--
+
+- Haciendo click en una de estas opciones, el encabezado YAML se actualizará automáticamente. Es posible compilar en simultáneo a múltiples formatos un mismo documento.
+<br><br>
+--
+
+- El archivo compilado en el formato elegido se guardará en el mismo directorio que el Rmd.
+
+---
+# Compilar el ejemplo a PDF
+![](img_md/compile.gif)
+---
+# Flujo RMarkdown
+
+En el proceso de compilación suceden por detrás varias cosas hasta llegar a generarse el archivo de salida. 
+
+.center.w-80[
+```{r echo = FALSE}
+knitr::include_graphics("img_md/rmarkdown_workflow.png")
+```
+]
+
+Al hacer knit está corriendo por detrás la función `rmarkdown::render()`
+
+---
+# Flujo RMarkdown
+
+- Al compilar el archivo `r text_spec2(".Rmd")` se genera un archivo temporal `r text_spec2(".md")` 
+<br><br>
+
+
+- Luego el archivo `r text_spec2(".md")` es procesado por *Pandoc*, un herramienta multipropósito diseñada para convertir archivos de un lenguaje de marcado a otro. Toma cada parámetro especificado en el YAML y lo convierte al formato especificado del documento de salida por ejemplo `r text_spec2(".HTML")`.
+<br><br>
+
+
+- Si el documento de salida es PDF, hay un proceso adicional donde Pandoc convierte el archivo `r text_spec2(".md")` a un archivo `r text_spec2(".tex")`. Este archivo es procesado por LaTeX para convertirlo en el formato final `r text_spec2(".PDF")`.
+
+---
+# Estructura de un archivo Rmd 
+
+1)  `r text_spec2("Encabezado YAML")`: al principio del documento se completan parámetros generales entre `---`. Es la metadata del documento.
+
+
+2) `r text_spec2("Texto")`: cotiene código markdown para darle formato
+
+3) `r text_spec2("Código")`: contiene código R. El entorno para escribir código R se denomina `chunk` .
+
+.center.w-100[
+```{r echo = FALSE}
+knitr::include_graphics("img_md/encabezado_rmd_partes.png")
+```
+]
+
+---
+class: inverse, center, middle
+# YAML
+
+---
+# Encabezado YAML
+
+- YAML significa YAML Ain’t Markup Language.
+<br><br>
+--
+
+- El YAML comienza y termina con 3 guiones y se define la metadata del documento. Los nombres de los argumentos se escriben en inglés y van seguidos de `:`
+
+.center.w-100[
+```{r echo = FALSE}
+knitr::include_graphics("img_md/yaml_argumentos.png")
+```
+]
+
+- Un encabezado básico de un documento .Rmd genera un documento de salida con título, nombre de autor/a/e y fecha.
+<br><br>
+--
+
+.pull-left[
+**Rmd**
+
+```{r out.width = "400px" ,fig.align="center", echo=FALSE}
+knitr::include_graphics("img_md/encabezado_source.png")
+```
+
+]
+.pull-right[
+**PDF**
+
+```{r out.width = "250px" ,fig.align="center", echo=FALSE}
+knitr::include_graphics("img_md/encabezado_output.png")
+```
+]
+
+---
+class: inverse, center, middle
+# Formatos de salida
+
+---
+# HTML
+
+- Compilar a formato Hyper Text Markup Language (HTML) es el valor por defecto.
+<br><br>
+--
+
+- La ventaja de HTML sobre otros formatos es que permite  `r text_spec2("agregar elementos interactivos")` al documento, por ejemplo, gifs y videos. 
+<br><br>
+--
+
+- Esta presentación esta hecha en Rmd y compilada a HTML ya que contiene elementos interactivos que no se verían en PDF.
+<br><br>
+--
+
+- Para ver un documento HTML, es necesario abrirlo en un navegador de internet.
+
+---
+# PDF
+
+- Otra opción es compilar a Portable Document Format (PDF)
+<br><br>
+--
+
+- Para exportar a PDF es necesario tener el programa `r text_spec2("LaTeX instalado")`.
+<br><br>
+--
+
+- De lo contrario saldrá un mensaje de error indicando que LaTeX no está instalado y es necesario para generar el output en PDF.
+<br><br>
+--
+
+- LaTeX es un sistema de composición de textos que tiene su propio lenguaje (comandos y paquetes). 
+<br><br>
+--
+
+- Gracias al paquete `r text_spec2("tinytex")` se puede instalar desde R. Se instala como vimos unas diapos antes:
+
+```{r eval =FALSE}
+# tinytex se instala en 2 pasos
+install.packages("tinytex") #<<
+tinytex::install_tinytex() #<<
+```
+
+---
+# Word
+
+- Otro formato de salida posible es Microsoft Word.
+<br><br>
+--
+
+- No es necesario tener instalado Word en la computadora
+<br><br>
+--
+
+- Al igual que el formato PDF, no permite elementos interactivos.
+<br><br>
+--
+
+- Para darle formato es necesario usar un template hecho en Word.
+
+---
+class: inverse, center, middle
+# Markdown
+
+
+---
+# Sintaxis básica Markdown
+
+- Markdown es un lenguaje de marcado, por ejemplo, para escribir un texto en negrita es necesario escribir dos asteriscos antes y despúes.
+
+```{r out.width = "650px" ,fig.align="left", echo=FALSE}
+knitr::include_graphics("img_md/texto.png")
+```
+
+[RMarkdown guía](https://rmarkdown.rstudio.com/docs/)
+
+---
+# Títulos, súbtitulos, etc.
+
+- El tamaño de los títulos se define agregando un  `r text_spec2("símbolo de numeral")` (hashtag).
+<br><br>
+--
+
+- La  `r text_spec2("jerarquía")` del título está determinada por la  `r text_spec2("cantidad")` de `#`
+<br><br>
+--
+
+- El título más grande va precedido de un numeral.
+<br><br>
+--
+
+- Cuanto más numerales, más se achica el título.
+<br><br>
+--
+
+- Los títulos por defecto se ven en negrita.
+<br><br>
+--
+
+- Si definimos que los títulos estén numerados pero uno en particular preferimos que no (por ej. prefacio), agregamos `{-}` o `{.unnumbered}` después del título.
+
+
+---
+# Lista sin orden
+
+```{r out.width = "650px" ,fig.align="left", echo=FALSE}
+knitr::include_graphics("img_md/lista_desordenada.png")
+```
+
+---
+# Lista ordenada
+
+```{r out.width = "650px" ,fig.align="left", echo=FALSE}
+knitr::include_graphics("img_md/lista_ordenada.png")
+```
+
+---
+# Listas anidadas 
+
+```{r out.width = "650px" ,fig.align="left", echo=FALSE}
+knitr::include_graphics("img_md/listas_anidadas.png")
+```
+
+
+---
+# Caracteres especiales
+
+<!-- Para que se impriman caracteres especiales se debe utilizar una \\ antes del símbolo   -->
+
+```{r out.width = "650px" ,fig.align="left", echo=FALSE}
+knitr::include_graphics("img_md/especiales.png")
+```
+
+---
+# Nota al pie
+
+- Para poner una nota al pie debo escribir `r text_spec2("^[]")` y dentro de los paréntesis rectos escribir el contenido de la nota al pie.
+<br><br>
+--
+
+- Al compilarse el documento estas notas al pie se numerarán automáticamente según el orden en que se ubiquen en el documento.
+<br><br>
+--
+
+- El texto de la nota al pie irá al final de la hoja debajo de una línea y en un tamaño de letra más chico que el del documento.
+<br><br>
+--
+
+.pull-left[
+**Rmd**
+
+```{r out.heigth = "650px" ,fig.align="left", echo=FALSE}
+knitr::include_graphics("img_md/nota_alpie_source.png")
+```
+]
+
+.pull-left[
+**PDF**
+
+```{r out.heigth = "650px" ,fig.align="left", echo=FALSE}
+knitr::include_graphics("img_md/nota_alpie_output1.png")
+```
+
+```{r out.heigth = "650px" ,fig.align="left", echo=FALSE}
+knitr::include_graphics("img_md/nota_alpie_output2.png")
+```
+
+]
+
+---
+# Incluir imágenes
+
+.pull-left[
+**Rmd**
+```{r echo = TRUE, eval = FALSE}
+![](img_intro/Rlogo.png)
+```
+
+]
+
+.pull-left[
+**PDF**
+```{r echo = FALSE, eval = TRUE}
+knitr::include_graphics("img_intro/Rlogo.png")
+```
+
+]
+
+Luego veremos otra forma de incluir imágenes
+
+Es posible modificar la apariencia/ubicación de la imagen  incluyendo código HTML, esto funciona cuando compilamos a HTML.
+
+---
+# Incluir imágenes
+
+.pull-left[
+**Rmd**
+```{r echo = TRUE, eval = FALSE}
+![Logo oficial de R](img_intro/Rlogo.png)
+```
+
+]
+
+.pull-left[
+**PDF**
+```{r echo = FALSE, eval = TRUE, fig.cap = "Logo oficial de R"}
+knitr::include_graphics("img_intro/Rlogo.png")
+```
+
+]
+
+---
+# Hipervínculos 
+
+Se puede hipervincular un texto indicando la url entre paréntesis y el texto entre rectos.
+
+En el documento de salida, hacer click sobre el texto hipervinculado lleva a la página web indicada.
+
+.pull-left[
+**Rmd**
+
+```{r out.width = "650px" ,fig.align="left", echo=FALSE}
+knitr::include_graphics("img_md/hipervinculo_source.png")
+```
+¨
+]
+
+.pull-right[
+**PDF**
+<br><br>
+
+```{r out.width = "650px" ,fig.align="left", echo=FALSE}
+knitr::include_graphics("img_md/hipervinculo_output.png")
+```
+]
+
+
+---
+class: inverse, center, middle
+# Configurar el YAML
+
+---
+# Secciones numeradas
+
+- Para indicar que queremos que las secciones (títulos, subtítulos, etc.) aparezcan numeradas debemos agregar la opción `number_sections` con el valor `true` en el YAML del documento
+<br><br>
+--
+
+- Esta opción es parte del output y el formato de salida `pdf_document` elegido.
+<br><br>
+--
+
+- Se debe escribir en "cascada" para que surta efecto, la opción `pdf_document` debe ir ahora en la línea de abajo de output y es necesario agregar : ya que vendrá una siguiente opción. En este caso agregamos en la siguiente línea la opción `number_sections: true`.
+
+.center.w-80[
+```{r echo = FALSE}
+knitr::include_graphics("img_md/yaml_sections.png")
+```
+]
+<br><br>
+--
+
+- Es necesario que diga `true` todo en minúscula, de lo contrario no funcionará.
+
+
+---
+# Tabla de contenidos
+
+- Para ver el índice del documento, se debe agregar en el YAML el argumento `toc` con valor `true`. TOC significa Table of Contents.
+<br><br>
+--
+
+- Para que aparezcan en el índice solo los títulos de primer nivel, debemos agregar la opción `toc_depth` con el valor `1`.
+
+   
+.pull-left[
+**Rmd**
+
+```{r out.width = "200px" ,fig.align="left", echo=FALSE}
+knitr::include_graphics("img_md/toc_source.png")
+```
+
+
+```{r out.width = "600px" ,fig.align="left", echo=FALSE}
+knitr::include_graphics("img_md/toc_titulos.png")
+```
+
+]
+
+.pull-right[
+**PDF**
+<br><br>
+
+```{r out.width = "650px" ,fig.align="left", echo=FALSE}
+knitr::include_graphics("img_md/toc_output.png")
+```
+]
+
+
+
+
+
+---
+# Opciones de figuras
+
+- Hay una serie de opciones que afectan a la salida de las figuras de los documentos PDF:
+<br><br>
+--
+
+- `fig_width` y `fig_height` pueden usarse para controlar el ancho y la altura de la figura por defecto (6x4.5 es usado por defecto).
+<br><br>
+--
+
+- `fig_crop` controla si la utilidad pdfcrop, si está disponible en su sistema, se aplica automáticamente a las figuras PDF (esto es cierto por defecto).
+<br><br>
+--
+
+- `fig_caption` controla si las figuras se muestran con subtítulos (esto es falso por defecto).
+<br><br>
+--
+
+- Luego veremos otra forma de controlar las opciones de las figuras.
+
+---
+# Ejemplo 
+
+
+```{r eval=FALSE}
+---
+title: "Titulo"   
+author: "Nombre"  
+output:
+  pdf_document:
+    fig_width: 7
+    fig_height: 6
+    fig_caption: true
+---
+```
+
+---
+# Opciones de LaTeX
+
+También se puede definir en el YAML el tamaño de hoja, la fuente, el tamaño de fuente, los márgenes, etc.
+
+
+| __Variable__	| __Descripción__ |
+|:-----------|:-------------------------------------------|
+|`lang` |	Idioma del documento |
+|`fontsize` |	Tamaño de la fuente (i.e. 10pt, 11pt, 12pt) |
+|`documentclass` |	Clase de documento (i.e. `article`) |
+|`classoption` |	Opciones de la `documentclass` (i.e. `oneside` o `a4paper`) |
+|`geometry` |	Tamaño de los márgenes (i.e. `margin=1in`) |
+|`mainfont`, `sansfont`, `monofont`, `mathfont`	| Tipos de fuentes (funciona solo con xelatex o lualatex)|
+|`linkcolor`, `urlcolor`, `citecolor`	| Color de los vínculos internos, externos, y de citas|
+
+
+---
+# Ejemplo
+
+Y nuestro encabezado se podría ver así...
+
+
+```{r eval=FALSE}
+---
+title: "Titulo"   
+author: "Nombre"  
+output:
+  pdf_document    
+lang: "es-UY"
+classoption: a4paper     
+fontsize: 12pt    
+geometry: margin = 1.2in     
+linkcolor: black    
+urlcolor: blue
+---
+```
+
+
